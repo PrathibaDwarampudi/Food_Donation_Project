@@ -7,7 +7,11 @@ from sklearn.ensemble import RandomForestClassifier
 st.title("AI-Based Food Donation Need Predictor")
 
 # Load dataset
-df = pd.read_csv("data.csv")
+import os
+
+DATA_PATH = os.path.join(os.path.dirname(__file__), "data.csv")
+df = pd.read_csv(DATA_PATH)
+
 
 # Convert event type to numbers
 df["event_type"] = df["event_type"].astype(str).str.lower().map({
@@ -46,3 +50,4 @@ if st.button("Predict"):
         st.warning("Medium Food Donation Need")
     else:
         st.success("Low Food Donation Need")
+
