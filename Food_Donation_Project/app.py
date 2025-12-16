@@ -2,7 +2,12 @@ import streamlit as st
 import pickle
 import numpy as np
 
-model = pickle.load(open("model.pkl", "rb"))
+import os
+import pickle
+
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.pkl")
+model = pickle.load(open(MODEL_PATH, "rb"))
+
 
 st.title("Food Shortage Risk Predictor")
 
@@ -25,3 +30,4 @@ if st.button("Predict"):
         st.warning("Medium Food Shortage Risk")
     else:
         st.success("Low Food Shortage Risk")
+
