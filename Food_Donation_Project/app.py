@@ -5,19 +5,20 @@ from sklearn.ensemble import RandomForestClassifier
 import os
 
 # -------------------------------
-# App Title
+# Title
 # -------------------------------
 st.title("AI-Based Food Donation Need Predictor")
 
 # -------------------------------
-# Load Dataset (SAFE PATH)
+# Load CSV safely
 # -------------------------------
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data.csv")
 df = pd.read_csv(DATA_PATH)
 
 # -------------------------------
-# Clean and Encode event_type
+# Force numeric conversion (KEY FIX)
 # -------------------------------
+# Convert event_type text to numbers
 df["event_type"] = (
     df["event_type"]
     .astype(str)
@@ -30,9 +31,11 @@ df["event_type"] = (
     })
 )
 
-# -------------------------------
-# Remove missing values
-# -------------------------------
+# Convert ALL columns to numeric (very important)
+for col in df.columns:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+
+# Drop rows with ANY missing or invalid values
 df = df.dropna()
 
 # -------------------------------
@@ -42,13 +45,13 @@ X = df.drop("donation_need", axis=1)
 y = df["donation_need"]
 
 # -------------------------------
-# Train Model
+# Train model
 # -------------------------------
 model = RandomForestClassifier(random_state=42)
 model.fit(X, y)
 
 # -------------------------------
-# User Input Section
+# User Inputs
 # -------------------------------
 population = st.number_input("Population Density", min_value=0)
 income = st.number_input("Average Income", min_value=0)
